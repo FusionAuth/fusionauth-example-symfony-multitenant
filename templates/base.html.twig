@@ -14,6 +14,17 @@
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        {% block body %}
+            <div id="nav">
+                {% block nav %}
+                    <a href="{{ path('app_home_index') }}">Home</a> |
+                    <a href="{{ path('app_chat_index') }}">Chat</a> 
+                {% endblock %}
+            </div>
+
+            <div id="content">
+                {% block content %}{% endblock %}
+            </div>
+        {% endblock %}
     </body>
 </html>
