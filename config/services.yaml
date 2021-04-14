@@ -4,6 +4,8 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    fusionauth_base: '%env(FUSIONAUTH_BASE)%'
+    fusionauth_client_id: '%env(CLIENT_ID)%'
 
 services:
     # default configuration for services in *this* file
@@ -34,6 +36,9 @@ services:
            - url: '/home'
 
     App\EventListener\CustomLogoutListener:
+        arguments:
+           $fusionauthBase: '%env(FUSIONAUTH_BASE)%'
+           $fusionauthClientId: '%env(CLIENT_ID)%'
         tags:
             - name: kernel.event_listener
               dispatcher: security.event_dispatcher.main

@@ -18,7 +18,10 @@
             <div id="nav">
                 {% block nav %}
                     <a href="{{ path('app_home_index') }}">Home</a>
-                    | <a href="{{ path('connect_fusionauth_start') }}">Login</a>
+                    {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+                       | <a href="{{ path('connect_fusionauth_start') }}">Login</a>
+                       | <a href="{{ path('app_registration_index') }}">Register</a>
+                    {% endif %}
                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                        | <a href="{{ path('app_logout') }}">Logout</a>
                        | <a href="{{ path('app_chat_index') }}">Chat</a> 

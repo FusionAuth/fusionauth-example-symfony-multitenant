@@ -17,8 +17,6 @@ class FusionauthController extends AbstractController
      */
     public function connectAction(ClientRegistry $clientRegistry)
     {
-
-        // will redirect to Facebook!
         return $clientRegistry
             ->getClient('fusionauth') // key used in config/packages/knpu_oauth2_client.yaml
             ->redirect([

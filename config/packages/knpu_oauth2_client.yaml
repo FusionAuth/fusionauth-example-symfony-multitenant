@@ -4,10 +4,10 @@ knpu_oauth2_client:
         fusionauth: 
             type: 'generic'
             provider_class: '\JerryHopper\OAuth2\Client\Provider\FusionAuth'
-            client_id: 'a74f3125-c3c9-459e-881e-378ce8322880'
+            client_id: '%env(CLIENT_ID)%'
             client_secret: '%env(CLIENT_SECRET)%'
             redirect_route: 'connect_fusionauth_check'
             provider_options: 
-                urlAuthorize: 'https://local.fusionauth.io/oauth2/authorize'
-                urlAccessToken: 'https://local.fusionauth.io/oauth2/token'
-                urlResourceOwnerDetails: 'https://local.fusionauth.io/oauth2/userinfo'
+                urlAuthorize: '%env(FUSIONAUTH_BASE)%/oauth2/authorize'
+                urlAccessToken: '%env(FUSIONAUTH_BASE)%/oauth2/token'
+                urlResourceOwnerDetails: '%env(FUSIONAUTH_BASE)%/oauth2/userinfo'
