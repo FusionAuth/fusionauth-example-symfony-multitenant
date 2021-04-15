@@ -18,7 +18,7 @@ TBD
 * Set up a FusionAuth application in the admin UI.
   * On the OAuth tab
     * Add the following to the Authorized redirect URLs list: `http://localhost:8000/connect/fusionauth/check`
-    * Add the following to the Logout URL: http://localhost:8000 
+    * Add the following to the Logout URL: `http://localhost:8000`
   * On the Registration tab
     * Turn on self service registration.
     * set the type to 'Basic' and the login type to 'Email'
