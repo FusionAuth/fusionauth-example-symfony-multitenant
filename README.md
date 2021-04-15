@@ -9,12 +9,15 @@ TBD
 ## Prerequisites
 
 * Symfony 5 installed, including the `symfony` cli tool.
+* Composer
+* A modern PHP (tested with php 7.3.24)
 * FusionAuth installed. See https://fusionauth.io/docs/v1/tech/5-minute-setup-guide/ for install instructions.
 * A database such as MySQL installed.
 
 ## To set up
 
 * Clone this repository
+* run 
 * Set up a FusionAuth application in the admin UI.
   * On the OAuth tab
     * Add the following to the Authorized redirect URLs list: `http://localhost:8000/connect/fusionauth/check`
