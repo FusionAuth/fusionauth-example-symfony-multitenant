@@ -8,9 +8,9 @@ TBD
 
 ## Prerequisites
 
-* Symfony 5 installed, including the `symfony` cli tool
-* FusionAuth installed. See 
-* A database such as MySQL installed
+* Symfony 5 installed, including the `symfony` cli tool.
+* FusionAuth installed. See https://fusionauth.io/docs/v1/tech/5-minute-setup-guide/ for install instructions.
+* A database such as MySQL installed.
 
 ## To set up
 
