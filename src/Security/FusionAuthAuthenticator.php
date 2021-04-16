@@ -56,10 +56,7 @@ class FusionAuthAuthenticator extends OAuth2Authenticator
                     return $existingUser;
                 }
 
-                // 2) do we have a matching user by email?
-                $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
-
-                // 3) Maybe you just want to "register" them by creating
+                // Maybe you just want to "register" them by creating
                 // a User object
                 $user = new User();
                 $user->setFusionAuthId($fusionAuthUser->getId());
