@@ -31,6 +31,10 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\Security\Firewall\EntryPoint: 
+        arguments:
+           - url: '/home'
+
     App\EventListener\CustomLogoutListener:
         arguments:
            $fusionauthBase: '%env(FUSIONAUTH_BASE)%'
