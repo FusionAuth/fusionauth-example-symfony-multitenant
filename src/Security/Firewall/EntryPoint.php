@@ -14,7 +14,7 @@ class EntryPoint implements AuthenticationEntryPointInterface{
   public function start(Request $request, AuthenticationException $authException = null){
       $response = new Response(
         '',
-        Response::HTTP_FOUND, //for 302 and Response::HTTP_TEMPORARY_REDIRECT for HTTP307 read about in [Response][4]
+        Response::HTTP_FOUND, //for 302 and Response::HTTP_TEMPORARY_REDIRECT for HTTP307 
         array('Location'=>$this->url)); 
       return $response;
   }
