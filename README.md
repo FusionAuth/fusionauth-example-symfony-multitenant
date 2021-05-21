@@ -33,5 +33,5 @@ TBD
   * FusionAuth client secret: `CLIENT_SECRET`
   * FusionAuth location: `FUSIONAUTH_BASE`, like `https://local.fusionauth.io`
 * Run the migration to create the objects: `symfony console doctrine:migrations:migrate`
-* Start the server: `symfony server:start
+* Start the server: `symfony server:start`
 * Visit `http://localhost:8000` and you should be able to login or register.
