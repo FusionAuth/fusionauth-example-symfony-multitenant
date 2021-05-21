@@ -33,6 +33,11 @@ class User implements UserInterface
      */
     private $roles = [];
 
+    /**
+     * @ORM\OneToOne(targetEntity=Tenant::class, mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $tenant;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -118,5 +123,22 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getTenant(): ?Tenant
+    {
+        return $this->tenant;
+    }
+
+    public function setTenant(Tenant $tenant): self
+    {
+        // set the owning side of the relation if necessary
+        if ($tenant->getUser() !== $this) {
+            $tenant->setUser($this);
+        }
+
+        $this->tenant = $tenant;
+
+        return $this;
     }
 }
