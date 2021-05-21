@@ -33,7 +33,7 @@ services:
     # please note that last definitions always *replace* previous ones
     App\Security\Firewall\EntryPoint: 
         arguments:
-           - url: '/home'
+           - url: '/'
 
     App\EventListener\CustomLogoutListener:
         arguments:
