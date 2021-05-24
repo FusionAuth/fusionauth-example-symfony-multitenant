@@ -25,6 +25,7 @@ class Tenant
 
     /**
      * @Assert\NotBlank
+     * @Assert\Hostname(requireTld=false)
      * @ORM\Column(type="string", length=255)
      */
     private $hostname;
@@ -127,4 +128,5 @@ class Tenant
 
         return $this;
     }
+
 }
