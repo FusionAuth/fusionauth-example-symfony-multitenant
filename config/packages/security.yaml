@@ -33,5 +33,6 @@ security:
     access_control:
         - { path: ^/home, roles: PUBLIC_ACCESS }
         - { path: ^/chat, roles: ROLE_USER }
+        - { path: ^/tenant, roles: ROLE_USER }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\TenantRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,11 +24,13 @@ class Tenant
     private $applicationId;
 
     /**
+     * @Assert\NotBlank
      * @ORM\Column(type="string", length=255)
      */
     private $hostname;
 
     /**
+     * @Assert\NotBlank
      * @ORM\Column(type="string", length=6)
      */
     private $backgroundColorCode;
@@ -42,6 +45,11 @@ class Tenant
      * @ORM\Column(type="string", length=255)
      */
     private $fusionAuthTenantId;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $apiKey;
 
     public function getId(): ?int
     {
@@ -77,7 +85,7 @@ class Tenant
         return $this->backgroundColorCode;
     }
 
-    public function setBackgroundColor(string $backgroundColorCode): self
+    public function setBackgroundColorCode(string $backgroundColorCode): self
     {
         $this->backgroundColorCode = $backgroundColorCode;
 
@@ -104,6 +112,18 @@ class Tenant
     public function setFusionAuthTenantId(string $fusionAuthTenantId): self
     {
         $this->fusionAuthTenantId = $fusionAuthTenantId;
+
+        return $this;
+    }
+
+    public function getApiKey(): ?string
+    {
+        return $this->apiKey;
+    }
+
+    public function setApiKey(string $apiKey): self
+    {
+        $this->apiKey = $apiKey;
 
         return $this;
     }

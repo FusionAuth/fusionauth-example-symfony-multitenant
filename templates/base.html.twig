@@ -25,6 +25,7 @@
                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                        | <a href="{{ path('app_logout') }}">Logout</a>
                        | <a href="{{ path('app_chat_index') }}">Chat</a> 
+                       | {% if app.user.tenant is null%}<a href="{{ path('app_tenant_new') }}">Create Tenant {%endif%}</a> 
                     {% endif %}
                 {% endblock %}
             </div>
