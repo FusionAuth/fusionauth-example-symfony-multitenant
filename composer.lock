@@ -1500,16 +1500,16 @@
         },
         {
             "name": "fusionauth/fusionauth-client",
-            "version": "1.25.0",
+            "version": "1.27.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FusionAuth/fusionauth-php-client.git",
-                "reference": "eb4c0e34940617a9aeddccdc3f1b7b0df7bae30e"
+                "reference": "c1f184efc403a935e15fd06ebec21ede019cf51e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FusionAuth/fusionauth-php-client/zipball/eb4c0e34940617a9aeddccdc3f1b7b0df7bae30e",
-                "reference": "eb4c0e34940617a9aeddccdc3f1b7b0df7bae30e",
+                "url": "https://api.github.com/repos/FusionAuth/fusionauth-php-client/zipball/c1f184efc403a935e15fd06ebec21ede019cf51e",
+                "reference": "c1f184efc403a935e15fd06ebec21ede019cf51e",
                 "shasum": ""
             },
             "require": {
@@ -1546,7 +1546,7 @@
                 "fusionauth",
                 "rest"
             ],
-            "time": "2021-03-06T23:25:32+00:00"
+            "time": "2021-05-10T19:00:36+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
