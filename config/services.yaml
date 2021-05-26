@@ -43,3 +43,14 @@ services:
             - name: kernel.event_listener
               dispatcher: security.event_dispatcher.main
               event: 'Symfony\Component\Security\Http\Event\LogoutEvent'
+    App\EventListener\TenantChangedNotifier:
+        arguments:
+           $fusionauthBase: '%env(FUSIONAUTH_BASE)%'
+           $blueprintTenantId: '%env(FUSIONAUTH_BLUEPRINT_TENANT_ID)%'
+           $fusionauthKeyManagerKey: '%env(FUSIONAUTH_KEYMANAGER_API_KEY)%'
+        tags:
+            -
+                # these are the options required to define the entity listener
+                name: 'doctrine.orm.entity_listener'
+                event: 'prePersist'
+                entity: 'App\Entity\Tenant'

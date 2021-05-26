@@ -52,6 +52,16 @@ class Tenant
      */
     private $apiKey;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $apiKeyId;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $client_secret;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -125,6 +135,30 @@ class Tenant
     public function setApiKey(string $apiKey): self
     {
         $this->apiKey = $apiKey;
+
+        return $this;
+    }
+
+    public function getApiKeyId(): ?string
+    {
+        return $this->apiKeyId;
+    }
+
+    public function setApiKeyId(string $apiKeyId): self
+    {
+        $this->apiKeyId = $apiKeyId;
+
+        return $this;
+    }
+
+    public function getClientSecret(): ?string
+    {
+        return $this->client_secret;
+    }
+
+    public function setClientSecret(string $client_secret): self
+    {
+        $this->client_secret = $client_secret;
 
         return $this;
     }

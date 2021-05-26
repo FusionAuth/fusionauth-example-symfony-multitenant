@@ -24,8 +24,6 @@ class TenantController extends AbstractController
 
         // creates a task object and initializes some data for this example
         $tenant = new Tenant();
-        $tenant->setApplicationId("abc");
-        $tenant->setFusionAuthTenantId("abc");
 
         $form = $this->createForm(TenantType::class, $tenant);
         $form->handleRequest($request);
