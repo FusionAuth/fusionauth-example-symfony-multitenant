@@ -11,6 +11,9 @@ framework:
         cookie_secure: auto
         cookie_samesite: lax
 
+    trusted_proxies: '127.0.0.1,REMOTE_ADDR'
+    trusted_headers: ['x-forwarded-for', 'x-forwarded-host', 'x-forwarded-proto', 'x-forwarded-port']
+
     #esi: true
     #fragments: true
     php_errors:
