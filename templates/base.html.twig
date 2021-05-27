@@ -23,9 +23,10 @@
                        | <a href="{{ path('app_registration_index') }}">Register</a>
                     {% endif %}
                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                       | <a href="{{ path('app_chat_index') }}">Chat TBD gate for when we are in tenant app</a> 
                        | <a href="{{ path('app_logout') }}">Logout</a>
-                       | <a href="{{ path('app_chat_index') }}">Chat</a> 
-                       | {% if app.user.tenant is null%}<a href="{{ path('app_tenant_new') }}">Create Tenant {%endif%}</a> 
+                       {% if app.user.tenant is null%} | <a href="{{ path('app_tenant_new') }}"> Create Tenant {%endif%}</a> 
+                       {% if app.user.tenant is not null%} | <a href="{{ path('app_tenant_view',{tenantId: app.user.tenant.id}) }}">View Tenant</a>  {%endif%}
                     {% endif %}
                 {% endblock %}
             </div>
