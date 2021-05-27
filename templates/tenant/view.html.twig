@@ -1,0 +1,9 @@
+{# templates/task/view.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block content %}
+<h1>Your tenant details</h1>
+<p>Application link: <a href='https://{{ tenant.hostname }}.fusionauth.io'>Application</a></p>
+<p>Application login link: <a href='{{application_login_url}}'>Login</a></p>
+<p>Application registration link: <a href='{{application_register_url}}'>Register</a></p>
+{% endblock %}

@@ -46,11 +46,46 @@ class TenantController extends AbstractController
         ]);
 
     }
+
     /**
     * @Route("/tenant/success")
     */
     public function success(Request $request): Response
     {
         return $this->render('tenant/success.html.twig');
+    }
+
+    /**
+    * @Route("/tenant/view/{tenantId}")
+    */
+    public function view(Request $request, int $tenantId): Response
+    {
+        $repository = $this->getDoctrine()->getRepository(Tenant::class);
+
+ 
+        $tenant = $repository->find($tenantId);
+        $fusionauth_base = $this->getParameter('fusionauth_base');
+
+        $redirect_uri = 'https://'.$tenant->getHostname().'.fusionauth.io/login/callback'; // TBD have fusionauth.io be parameter
+
+        $provider = new \League\OAuth2\Client\Provider\GenericProvider([
+            'clientId' => $tenant->getApplicationId(), 
+            'clientSecret' => $tenant->getClientSecret(),
+            'redirectUri'  => $redirect_uri,
+            'urlAuthorize' => $fusionauth_base.'/oauth2/authorize',
+            'urlAccessToken' => $fusionauth_base.'/oauth2/token',
+            'urlResourceOwnerDetails' => $fusionauth_base.'/oauth2/userinfo' 
+        ]);
+ 
+        $_SESSION['oauth2state'] = $provider->getState();
+
+        // well known url TBD document this?
+        $application_registration_url = str_replace('authorize','register',$provider->getAuthorizationUrl());
+
+        return $this->render('tenant/view.html.twig', [
+          'tenant' => $tenant,
+          'application_login_url' => $provider->getAuthorizationUrl(),
+          'application_register_url' => $application_registration_url
+        ]);
     }
 }
