@@ -15,6 +15,7 @@
         "fusionauth/fusionauth-client": "^1.25",
         "jerryhopper/oauth2-fusionauth": "^0.0.2",
         "knpuniversity/oauth2-client-bundle": "^2.8",
+        "league/oauth2-client": "^2.6",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^6.1",
         "symfony/asset": "5.2.*",
