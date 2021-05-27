@@ -23,6 +23,7 @@ class TenantChangedNotifier
         $this->logger = $logger;
     }
 
+// TBD does prePersist happen on update? I don't think so.
     public function prePersist(Tenant $tenant, LifecycleEventArgs $event): void
     {
         $client = new FusionAuthClient($this->fusionauthKeyManagerKey, $this->fusionauthBase);
@@ -119,12 +120,17 @@ class TenantChangedNotifier
 
         $application_object = array();
         $application_object["name"] = "Default application for ".$hostname;
+        $ppvc_app_base = "https://".$hostname.".fusionauth.io"; // TBD pull fusionauth.io from configuration
 
         $application_oauthconfiguration = array();
-        $application_oauthconfiguration["authorizedRedirectURLs"] = ["http://localhost:8000/oauthredirect","http://localhost:8000/oauthredirect2"];
+        $application_oauthconfiguration["authorizedRedirectURLs"] = [$ppvc_app_base."/login/callback"]; 
         $application_oauthconfiguration["enabledGrants"] = ["authorization_code"];
-// TODO need to figure out what the actual redirect urls are
+        $application_oauthconfiguration["logoutURL"] = $ppvc_app_base;
         $application_object["oauthConfiguration"] = $application_oauthconfiguration;
+
+        $application_registrationconfiguration = array();
+        $application_registrationconfiguration["enabled"] = true;
+        $application_object["registrationConfiguration"] = $application_registrationconfiguration;
 
         $application_request = array();
         $application_request["application"] = $application_object;
@@ -144,5 +150,6 @@ class TenantChangedNotifier
     private function convertObjectToArray($object) {
         return json_decode(json_encode($object));
     }
-    
+ 
+// TODO need to add user and register them for the application   
 }
