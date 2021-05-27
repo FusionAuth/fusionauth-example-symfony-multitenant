@@ -16,8 +16,10 @@ security:
             lazy: true
             provider: app_user_provider
             custom_authenticators:
-                 # for with knep
+                 # for use with knep
                  - App\Security\FusionAuthAuthenticator
+                 # for use with tenants
+                 - App\Security\FusionAuthTenantAuthenticator
             entry_point: App\Security\Firewall\EntryPoint
 
             logout:
