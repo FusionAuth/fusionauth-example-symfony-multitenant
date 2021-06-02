@@ -44,6 +44,10 @@ services:
            $controlPlaneClientSecret: '%env(CONTROL_PLANE_CLIENT_SECRET)%'
            $controlPlaneHostname: '%env(CONTROL_PLANE_HOSTNAME)%'
 
+    App\EventSubscriber\HostnameSubscriber:
+        arguments:
+           $controlPlaneHostname: '%env(CONTROL_PLANE_HOSTNAME)%'
+
     App\EventListener\CustomLogoutListener:
         arguments:
            $fusionauthBase: '%env(FUSIONAUTH_BASE)%'
@@ -53,6 +57,7 @@ services:
             - name: kernel.event_listener
               dispatcher: security.event_dispatcher.main
               event: 'Symfony\Component\Security\Http\Event\LogoutEvent'
+
     App\EventListener\TenantChangedNotifier:
         arguments:
            $fusionauthBase: '%env(FUSIONAUTH_BASE)%'

@@ -78,9 +78,6 @@ class FusionAuthTenantAuthenticator extends AbstractAuthenticator
               unset($_SESSION['oauth2state']);
             }
         }
-        $this->logger->error("error2");
-        $this->logger->error($clientId);
-        $this->logger->error($clientSecret);
 
         // Try to get an access token using the authorization code grant.
         $accessToken = $this->provider->getAccessToken('authorization_code', [
@@ -120,7 +117,16 @@ class FusionAuthTenantAuthenticator extends AbstractAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        $targetUrl = $this->router->generate('app_chat_index');
+        $host = $request->getHost();
+
+        // convert ppvcfoo.fusionauth.io to ppvcfoo so we can look up the tenant
+        $hostname = str_replace('.fusionauth.io','',$host); // TBD have 'fusionauth.io' be a parameter
+
+        if ($hostname === $this->controlPlaneHostname) {
+          $targetUrl = $this->router->generate('app_home_index');
+        } else {
+          $targetUrl = $this->router->generate('app_chat_index');
+        }
 
         return new RedirectResponse($targetUrl);
     
@@ -140,15 +146,12 @@ class FusionAuthTenantAuthenticator extends AbstractAuthenticator
     $client_secret = '';
 
     if ($hostname === $this->controlPlaneHostname) {
-      $this->logger->error("in here2");
       $client_id = $this->controlPlaneClientId;
       $client_secret = $this->controlPlaneClientSecret;
     } else { 
-      $this->logger->error("in here3");
       $repository = $entityManager->getRepository(Tenant::class);
       $tenant = $repository->findOneBy(array('hostname'=>$hostname));
       if ($tenant) {
-        $this->logger->error("in here4");
         $client_id = $tenant->getApplicationId();
         $client_secret = $tenant->getClientSecret();
       } else {
