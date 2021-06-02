@@ -47,7 +47,8 @@ services:
     App\EventListener\CustomLogoutListener:
         arguments:
            $fusionauthBase: '%env(FUSIONAUTH_BASE)%'
-           $fusionauthClientId: '%env(CLIENT_ID)%'
+           $controlPlaneClientId: '%env(CONTROL_PLANE_CLIENT_ID)%'
+           $controlPlaneHostname: '%env(CONTROL_PLANE_HOSTNAME)%'
         tags:
             - name: kernel.event_listener
               dispatcher: security.event_dispatcher.main
