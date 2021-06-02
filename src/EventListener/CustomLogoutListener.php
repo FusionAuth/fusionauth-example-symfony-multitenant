@@ -18,6 +18,7 @@ class CustomLogoutListener
 
    public function onSymfonyComponentSecurityHttpEventLogoutEvent(LogoutEvent $event)
     {
+//TBD need to handle different hostnames
 
         $fusionauth_base = $this->fusionauthBase;
         $client_id = $this->fusionauthClientId;

@@ -25,12 +25,20 @@ class FusionAuthTenantAuthenticator extends AbstractAuthenticator
     private $entityManager;
     private $router;
     private $provider;
+    private $fusionauthBase;
+    private $controlPlaneClientId;
+    private $controlPlaneClientSecret;
+    private $controlPlaneHostname;
 
-    public function __construct(LoggerInterface $logger, EntityManagerInterface $entityManager, RouterInterface $router)
+    public function __construct(LoggerInterface $logger, EntityManagerInterface $entityManager, RouterInterface $router, String $fusionauthBase, String $controlPlaneClientId, String $controlPlaneClientSecret, String $controlPlaneHostname)
     {
         $this->logger = $logger;
         $this->entityManager = $entityManager;
         $this->router = $router;
+        $this->fusionauthBase = $fusionauthBase;
+        $this->controlPlaneClientId = $controlPlaneClientId;
+        $this->controlPlaneClientSecret = $controlPlaneClientSecret;
+        $this->controlPlaneHostname = $controlPlaneHostname;
     }
 
     public function supports(Request $request): ?bool
@@ -46,17 +54,17 @@ class FusionAuthTenantAuthenticator extends AbstractAuthenticator
 
         // convert ppvcfoo.fusionauth.io to ppvcfoo so we can look up the tenant
         $hostname = str_replace('.fusionauth.io','',$host); // TBD have 'fusionauth.io' be a parameter
-
-        $repository = $this->entityManager->getRepository(Tenant::class);
-        $tenant = $repository->findOneBy(array('hostname'=>$hostname));
+        $clientIdAndSecret = $this->retrieveClientIdAndSecret($hostname, $this->entityManager);
+        $clientId = $clientIdAndSecret[0];
+        $clientSecret = $clientIdAndSecret[1];
 
         $redirect_uri = 'https://'.$host.'/login/callback';
 
         $fusionauth_base = 'https://local.fusionauth.io'; // TBD inject this $this->getParameter('fusionauth_base');
 
         $this->provider = new GenericProvider([
-            'clientId' => $tenant->getApplicationId(),
-            'clientSecret' => $tenant->getClientSecret(),
+            'clientId' => $clientId,
+            'clientSecret' => $clientSecret,
             'responseResourceOwnerId' => 'sub',
             'redirectUri'  => $redirect_uri,
             'urlAuthorize' => $fusionauth_base.'/oauth2/authorize',
@@ -70,6 +78,9 @@ class FusionAuthTenantAuthenticator extends AbstractAuthenticator
               unset($_SESSION['oauth2state']);
             }
         }
+        $this->logger->error("error2");
+        $this->logger->error($clientId);
+        $this->logger->error($clientSecret);
 
         // Try to get an access token using the authorization code grant.
         $accessToken = $this->provider->getAccessToken('authorization_code', [
@@ -121,4 +132,30 @@ class FusionAuthTenantAuthenticator extends AbstractAuthenticator
 
         return new Response($message, Response::HTTP_FORBIDDEN);
     }
+
+  // TBD somewhat duplicated code with the loginurl controller
+  private function retrieveClientIdAndSecret($hostname, $entityManager): array
+  {
+    $client_id = '';
+    $client_secret = '';
+
+    if ($hostname === $this->controlPlaneHostname) {
+      $this->logger->error("in here2");
+      $client_id = $this->controlPlaneClientId;
+      $client_secret = $this->controlPlaneClientSecret;
+    } else { 
+      $this->logger->error("in here3");
+      $repository = $entityManager->getRepository(Tenant::class);
+      $tenant = $repository->findOneBy(array('hostname'=>$hostname));
+      if ($tenant) {
+        $this->logger->error("in here4");
+        $client_id = $tenant->getApplicationId();
+        $client_secret = $tenant->getClientSecret();
+      } else {
+        // TBD what if someone is probing our allowed hostnames
+      }
+    }
+    return [$client_id, $client_secret];
+  }
+
 }

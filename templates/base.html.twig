@@ -19,8 +19,8 @@
                 {% block nav %}
                     <a href="{{ path('app_home_index') }}">Home</a>
                     {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
-                       | <a href="{{ path('connect_fusionauth_start') }}">Login</a>
-                       | <a href="{{ path('app_registration_index') }}">Register</a>
+                       | <a href="{{ path('app_loginurl_login') }}">Login</a>
+                       | <a href="{{ path('app_loginurl_register') }}">Register</a>
                     {% endif %}
                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                        | <a href="{{ path('app_chat_index') }}">Chat TBD gate for when we are in tenant app</a> 

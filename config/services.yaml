@@ -5,7 +5,9 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     fusionauth_base: '%env(FUSIONAUTH_BASE)%'
-    fusionauth_client_id: '%env(CLIENT_ID)%'
+    control_plane_client_id: '%env(CONTROL_PLANE_CLIENT_ID)%'
+    control_plane_client_secret: '%env(CONTROL_PLANE_CLIENT_SECRET)%'
+    control_plane_hostname: '%env(CONTROL_PLANE_HOSTNAME)%'
 
 services:
     # default configuration for services in *this* file
@@ -34,6 +36,13 @@ services:
     App\Security\Firewall\EntryPoint: 
         arguments:
            - url: '/'
+
+    App\Security\FusionAuthTenantAuthenticator:
+        arguments:
+           $fusionauthBase: '%env(FUSIONAUTH_BASE)%'
+           $controlPlaneClientId: '%env(CONTROL_PLANE_CLIENT_ID)%'
+           $controlPlaneClientSecret: '%env(CONTROL_PLANE_CLIENT_SECRET)%'
+           $controlPlaneHostname: '%env(CONTROL_PLANE_HOSTNAME)%'
 
     App\EventListener\CustomLogoutListener:
         arguments:
