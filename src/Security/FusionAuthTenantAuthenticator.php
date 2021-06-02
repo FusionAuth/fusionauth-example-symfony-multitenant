@@ -105,7 +105,7 @@ class FusionAuthTenantAuthenticator extends AbstractAuthenticator
                 // a User object
                 $user = new User();
                 $user->setFusionAuthId($fusionAuthUser->getId());
-                $user->setEmail($email);
+                $user->setEmail($fusionAuthUser->getId().$email);
                 $user->setRoles($fusionAuthUser->toArray()['roles']);
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();
