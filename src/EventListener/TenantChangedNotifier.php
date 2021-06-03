@@ -13,13 +13,15 @@ class TenantChangedNotifier
     private $fusionauthKeyManagerKey;
     private $fusionauthBase;
     private $blueprintTenantId;
+    private $saasRootDomain;
     private $logger;
 
-    public function __construct($fusionauthBase, $fusionauthKeyManagerKey, LoggerInterface $logger, $blueprintTenantId)
+    public function __construct($fusionauthBase, $fusionauthKeyManagerKey, LoggerInterface $logger, $blueprintTenantId, $saasRootDomain)
     {
         $this->fusionauthBase = $fusionauthBase;
         $this->blueprintTenantId = $blueprintTenantId;
         $this->fusionauthKeyManagerKey = $fusionauthKeyManagerKey;
+        $this->saasRootDomain = $saasRootDomain;
         $this->logger = $logger;
     }
 
@@ -120,7 +122,7 @@ class TenantChangedNotifier
 
         $application_object = array();
         $application_object["name"] = "Default application for ".$hostname;
-        $ppvc_app_base = "https://".$hostname.".fusionauth.io"; // TBD pull fusionauth.io from configuration
+        $ppvc_app_base = "https://".$hostname.$this->saasRootDomain;
 
         $application_oauthconfiguration = array();
         $application_oauthconfiguration["authorizedRedirectURLs"] = [$ppvc_app_base."/login/callback"]; 

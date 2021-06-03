@@ -20,12 +20,14 @@ class OauthClientService
     private $controlPlaneClientId;
     private $controlPlaneClientSecret;
     private $controlPlaneHostname;
+    private $saasRootDomain;
 
-    public function __construct(LoggerInterface $logger, EntityManagerInterface $entityManager, String $fusionauthBase, String $controlPlaneClientId, String $controlPlaneClientSecret, String $controlPlaneHostname, LoginUrlService $loginUrlService)
+    public function __construct(LoggerInterface $logger, EntityManagerInterface $entityManager, String $fusionauthBase, String $controlPlaneClientId, String $controlPlaneClientSecret, String $controlPlaneHostname, LoginUrlService $loginUrlService, String $saasRootDomain)
     {
         $this->logger = $logger;
         $this->entityManager = $entityManager;
         $this->fusionauthBase = $fusionauthBase;
+        $this->saasRootDomain = $saasRootDomain;
         $this->controlPlaneClientId = $controlPlaneClientId;
         $this->controlPlaneClientSecret = $controlPlaneClientSecret;
         $this->controlPlaneHostname = $controlPlaneHostname;
@@ -65,7 +67,11 @@ class OauthClientService
   }
 
   public function hostname($host) {
-    return str_replace('.fusionauth.io','',$host); // TBD have 'fusionauth.io' be a parameter
+    return str_replace($this->saasRootDomain,'',$host); 
+  }
+
+  public function applicationURI($hostname) {
+    return $hostname.$this->saasRootDomain; 
   }
 
   public function providerFromHostname($hostname) {

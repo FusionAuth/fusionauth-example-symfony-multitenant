@@ -66,6 +66,7 @@ class TenantController extends AbstractController
 
         $tenant = $repository->find($tenantId);
         $provider = $oauthClientService->providerFromHostname($tenant->getHostname());
+        $application_url = $oauthClientService->applicationURI($tenant->getHostname());
  
         $_SESSION['oauth2state'] = $provider->getState();
 
@@ -74,6 +75,7 @@ class TenantController extends AbstractController
         return $this->render('tenant/view.html.twig', [
           'tenant' => $tenant,
           'application_login_url' => $provider->getAuthorizationUrl(),
+          'application_url' => $application_url,
           'application_register_url' => $application_registration_url
         ]);
     }
