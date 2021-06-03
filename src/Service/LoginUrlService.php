@@ -26,9 +26,13 @@ class LoginUrlService
     return $provider->getAuthorizationUrl();
   }
 
+  public function registerURLUsingProvider($provider) 
+  {
+    return str_replace('authorize','register',$provider->getAuthorizationUrl());
+  }
+
   public function registerURL($host, $client_id, $client_secret)
   {
-
     $provider = new GenericProvider([
       'clientId' => $client_id,
       'clientSecret' => $client_secret,
@@ -38,7 +42,7 @@ class LoginUrlService
       'urlResourceOwnerDetails' => $this->fusionauthBase.'/oauth2/userinfo'
     ]);
 
-    return str_replace('authorize','register',$provider->getAuthorizationUrl());
+    return $this->registerURLUsingProvider($provider);
   }
 
   public function redirectURI($host) {

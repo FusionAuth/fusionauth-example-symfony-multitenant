@@ -5,6 +5,8 @@ namespace App\Controller;
 
 use App\Entity\Tenant;
 use App\Form\Type\TenantType;
+use App\Service\LoginUrlService;
+use App\Service\OauthClientService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -58,29 +60,16 @@ class TenantController extends AbstractController
     /**
     * @Route("/tenant/view/{tenantId}")
     */
-    public function view(Request $request, int $tenantId): Response
+    public function view(Request $request, int $tenantId, OauthClientService $oauthClientService, LoginUrlService $loginUrlService): Response
     {
         $repository = $this->getDoctrine()->getRepository(Tenant::class);
 
- 
         $tenant = $repository->find($tenantId);
-        $fusionauth_base = $this->getParameter('fusionauth_base');
-
-        $redirect_uri = 'https://'.$tenant->getHostname().'.fusionauth.io/login/callback'; // TBD have fusionauth.io be parameter
-
-        $provider = new \League\OAuth2\Client\Provider\GenericProvider([
-            'clientId' => $tenant->getApplicationId(), 
-            'clientSecret' => $tenant->getClientSecret(),
-            'redirectUri'  => $redirect_uri,
-            'urlAuthorize' => $fusionauth_base.'/oauth2/authorize',
-            'urlAccessToken' => $fusionauth_base.'/oauth2/token',
-            'urlResourceOwnerDetails' => $fusionauth_base.'/oauth2/userinfo' 
-        ]);
+        $provider = $oauthClientService->providerFromHostname($tenant->getHostname());
  
         $_SESSION['oauth2state'] = $provider->getState();
 
-        // well known url TBD document this?
-        $application_registration_url = str_replace('authorize','register',$provider->getAuthorizationUrl());
+        $application_registration_url = $loginUrlService->registerUrlUsingProvider($provider);
 
         return $this->render('tenant/view.html.twig', [
           'tenant' => $tenant,

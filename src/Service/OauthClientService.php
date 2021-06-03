@@ -68,6 +68,11 @@ class OauthClientService
     return str_replace('.fusionauth.io','',$host); // TBD have 'fusionauth.io' be a parameter
   }
 
+  public function providerFromHostname($hostname) {
+    $host = $hostname.'.fusionauth.io';
+    return $this->provider($host);
+  }
+
   public function provider($host) {
     $clientIdAndSecret = $this->retrieveClientIdAndSecret($host);
     $clientId = $clientIdAndSecret[0];
