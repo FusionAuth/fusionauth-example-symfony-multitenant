@@ -37,22 +37,18 @@ services:
         arguments:
            - url: '/'
 
-    App\Security\FusionAuthTenantAuthenticator:
+    App\Service\LoginUrlService:
+        arguments:
+           $fusionauthBase: '%env(FUSIONAUTH_BASE)%'
+
+    App\Service\OauthClientService:
         arguments:
            $fusionauthBase: '%env(FUSIONAUTH_BASE)%'
            $controlPlaneClientId: '%env(CONTROL_PLANE_CLIENT_ID)%'
            $controlPlaneClientSecret: '%env(CONTROL_PLANE_CLIENT_SECRET)%'
            $controlPlaneHostname: '%env(CONTROL_PLANE_HOSTNAME)%'
 
-    App\EventSubscriber\HostnameSubscriber:
-        arguments:
-           $controlPlaneHostname: '%env(CONTROL_PLANE_HOSTNAME)%'
-
     App\EventListener\CustomLogoutListener:
-        arguments:
-           $fusionauthBase: '%env(FUSIONAUTH_BASE)%'
-           $controlPlaneClientId: '%env(CONTROL_PLANE_CLIENT_ID)%'
-           $controlPlaneHostname: '%env(CONTROL_PLANE_HOSTNAME)%'
         tags:
             - name: kernel.event_listener
               dispatcher: security.event_dispatcher.main

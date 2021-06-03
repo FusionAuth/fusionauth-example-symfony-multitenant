@@ -3,7 +3,7 @@
 // src/EventSubscriber/HostnameSubscriber.php
 namespace App\EventSubscriber;
 
-use App\Controller\TokenAuthenticatedController;
+use App\Service\OauthClientService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -12,22 +12,19 @@ use Twig\Environment;
 
 class HostnameSubscriber implements EventSubscriberInterface
 {
-    private $controlPlaneHostname;
     private $twig;
+    private $oauthClientService;
 
-    public function __construct($controlPlaneHostname, Environment $twig)
+    public function __construct(Environment $twig, OauthClientService $oauthClientService)
     {
-        $this->controlPlaneHostname = $controlPlaneHostname;
         $this->twig = $twig;
+        $this->oauthClientService = $oauthClientService;
     }
 
     public function onKernelController(ControllerEvent $event)
-    {
-        $host = $event->getRequest()->getHost();
-        $hostname = str_replace('.fusionauth.io','',$host); // TBD have 'fusionauth.io' be a parameter
-
-        $this->twig->addGlobal('onControlPlaneApplication', $hostname === $this->controlPlaneHostname);
-
+    {  
+        $isControlPlaneHost = $this->oauthClientService->isControlPlaneHost($event->getRequest()->getHost());
+        $this->twig->addGlobal('onControlPlaneApplication', $isControlPlaneHost);
     }
 
     public static function getSubscribedEvents()
