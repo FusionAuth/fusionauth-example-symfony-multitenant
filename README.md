@@ -6,10 +6,6 @@ The application which lets users create tenants is called the control plane appl
 
 The control plane application url, where people sign up, might be `https://app.example.com`. A user can sign up and create their own application, which might live at `dantest.example.com` or `foobar.example.com`. 
 
-## Tutorial link
-
-TBD
-
 ## Prerequisites
 
 * Symfony 5 installed, including the `symfony` cli tool.
@@ -37,6 +33,7 @@ TBD
   * A root domain for your saas application: `SAAS_ROOT_DOMAIN`. Make sure you prefix it with a `.`: `.example.com`. Add a port if you aren't running a proxy: `.example.com:8000`.
   * The client id from your just created FusionAuth application: `CONTROL_PLANE_CLIENT_ID`
   * The client secret from your just created FusionAuth application: `CONTROL_PLANE_CLIENT_ID`
+  * The default signing key from FusionAuth (navigate to key master in the FusionAuth UI): `DEFAULT_SIGNING_KEY`
   * The hostname of the control plane web application. If the control plane, where people sign up, is app.example.com, then `CONTROL_PLANE_HOSTNAME` would be `app`. 
   * The FusionAuth location: `FUSIONAUTH_BASE`, like `https://local.fusionauth.io`
   * The key manager API key: `FUSIONAUTH_KEYMANAGER_API_KEY`

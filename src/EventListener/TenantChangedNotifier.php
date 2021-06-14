@@ -25,7 +25,7 @@ class TenantChangedNotifier
         $this->logger = $logger;
     }
 
-// TBD does prePersist happen on update? I don't think so.
+// will only happen on initial creation https://www.doctrine-project.org/projects/doctrine-orm/en/current/reference/events.html#lifecycle-events
     public function prePersist(Tenant $tenant, LifecycleEventArgs $event): void
     {
         $client = new FusionAuthClient($this->fusionauthKeyManagerKey, $this->fusionauthBase);
@@ -69,7 +69,7 @@ class TenantChangedNotifier
         $tenant_object = array();
         $tenant_object["name"] = $tenant->getHostname();
         $tenant_object["themeId"] = $blueprint_tenant->tenant->themeId;
-        $tenant_object["issuer"] = $tenant->getHostname().".example.com";
+        $tenant_object["issuer"] = "https://".$hostname.$this->saasRootDomain;
 
         $tenant_email_configuration = $this->convertObjectToArray($blueprint_tenant->tenant->emailConfiguration);
         $tenant_object["emailConfiguration"] = $tenant_email_configuration;
@@ -153,5 +153,4 @@ class TenantChangedNotifier
         return json_decode(json_encode($object));
     }
  
-// TODO need to add user and register them for the application   
 }

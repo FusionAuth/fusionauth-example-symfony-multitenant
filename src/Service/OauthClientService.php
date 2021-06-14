@@ -21,8 +21,9 @@ class OauthClientService
     private $controlPlaneClientSecret;
     private $controlPlaneHostname;
     private $saasRootDomain;
+    private $jwtSigningKey;
 
-    public function __construct(LoggerInterface $logger, EntityManagerInterface $entityManager, String $fusionauthBase, String $controlPlaneClientId, String $controlPlaneClientSecret, String $controlPlaneHostname, LoginUrlService $loginUrlService, String $saasRootDomain)
+    public function __construct(LoggerInterface $logger, EntityManagerInterface $entityManager, String $fusionauthBase, String $controlPlaneClientId, String $controlPlaneClientSecret, String $controlPlaneHostname, LoginUrlService $loginUrlService, String $saasRootDomain, String $jwtSigningKey)
     {
         $this->logger = $logger;
         $this->entityManager = $entityManager;
@@ -32,11 +33,17 @@ class OauthClientService
         $this->controlPlaneClientSecret = $controlPlaneClientSecret;
         $this->controlPlaneHostname = $controlPlaneHostname;
         $this->loginUrlService = $loginUrlService;
+        $this->jwtSigningKey = $jwtSigningKey;
     }
 
   public function retrieveClientId(String $host): String
   {
     return $this->retrieveClientIdAndSecret($host)[0];
+  }
+
+  public function getJwtSigningKey(): String
+  {
+    return $this->jwtSigningKey;
   }
 
   public function retrieveClientIdAndSecret(String $host): array

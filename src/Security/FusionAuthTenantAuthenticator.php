@@ -6,6 +6,7 @@ use App\Entity\Tenant;
 use App\Entity\User; // your user entity
 use App\Service\OauthClientService;
 use Doctrine\ORM\EntityManagerInterface;
+use \Firebase\JWT\JWT;
 use League\OAuth2\Client\Token\AccessToken;
 use League\OAuth2\Client\Provider\GenericProvider;
 use Psr\Log\LoggerInterface;
@@ -14,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
@@ -27,6 +29,7 @@ class FusionAuthTenantAuthenticator extends AbstractAuthenticator
     private $router;
     private $provider;
     private $oauthClientService;
+    private $jwtSigningKey;
 
     public function __construct(LoggerInterface $logger, EntityManagerInterface $entityManager, RouterInterface $router, OauthClientService $oauthClientService)
     {
@@ -34,6 +37,7 @@ class FusionAuthTenantAuthenticator extends AbstractAuthenticator
         $this->entityManager = $entityManager;
         $this->router = $router;
         $this->oauthClientService = $oauthClientService;
+        $this->jwtSigningKey = $oauthClientService->getJwtSigningKey();
     }
 
     public function supports(Request $request): ?bool
@@ -48,11 +52,12 @@ class FusionAuthTenantAuthenticator extends AbstractAuthenticator
 
         $this->provider = $this->oauthClientService->provider($host);
 
-        if (empty($request->query->get('state')) || (isset($_SESSION['oauth2state']) && $request->query->get('state') !== $_SESSION['oauth2state'])) { // TBD session?
-            // throw exception ? TBD
+        if (empty($request->query->get('state')) || (isset($_SESSION['oauth2state']) && $request->query->get('state') !== $_SESSION['oauth2state'])) { // TBD unsure if I should use the superglobal
             if (isset($_SESSION['oauth2state'])) {
               unset($_SESSION['oauth2state']);
             }
+            // we don't have a valid user
+            throw new CustomUserMessageAuthenticationException('No valid user provided');
         }
 
         // Try to get an access token using the authorization code grant.
@@ -60,7 +65,24 @@ class FusionAuthTenantAuthenticator extends AbstractAuthenticator
             'code' => $request->query->get('code')
         ]);
 
-        $credentials = new AccessToken(['access_token' => $accessToken]);
+        // maybe belongs in the oauth service?
+        $decodedJwt = JWT::decode($accessToken, $this->jwtSigningKey, array('HS256'));
+        
+        // map between what league client expects and what fusionauth provides
+        $credentials = new AccessToken([
+           'access_token' => $accessToken,
+           'applicationId' => $decodedJwt->applicationId, 
+           'expired' => $decodedJwt->exp, 
+           'iss' => $decodedJwt->iss, 
+        ]);
+
+        $expectedClientId = $this->oauthClientService->retrieveClientIdAndSecret($host)[0];
+        $values = $credentials->getValues();
+        $applicationId = $values['applicationId'];
+        if ($expectedClientId !== $applicationId) {
+            // valid user, but not registered for the fusionauth application
+            throw new CustomUserMessageAuthenticationException('User not registered in FusionAuth');
+        }
 
         return new SelfValidatingPassport(
             new UserBadge($credentials, function($credentials) {

@@ -85,6 +85,9 @@
     "egulias/email-validator": {
         "version": "3.1.1"
     },
+    "firebase/php-jwt": {
+        "version": "v5.3.0"
+    },
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.3"
     },

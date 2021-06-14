@@ -4,6 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    $fusionauthBase: '%env(FUSIONAUTH_BASE)%'
 
 services:
     # default configuration for services in *this* file
@@ -44,6 +45,7 @@ services:
            $controlPlaneClientSecret: '%env(CONTROL_PLANE_CLIENT_SECRET)%'
            $controlPlaneHostname: '%env(CONTROL_PLANE_HOSTNAME)%'
            $saasRootDomain: '%env(SAAS_ROOT_DOMAIN)%'
+           $jwtSigningKey: '%env(DEFAULT_SIGNING_KEY)%'
 
     App\EventListener\CustomLogoutListener:
         tags:
