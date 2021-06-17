@@ -6,6 +6,10 @@ The application which lets users create tenants is called the control plane appl
 
 The control plane application url, where people sign up, might be `https://app.example.com`. A user can sign up and create their own application, which might live at `dantest.example.com` or `foobar.example.com`. 
 
+## Guide
+
+This application was used to write a guide on multi-tenancy: https://fusionauth.io/docs/v1/tech/guides/multi-tenant/
+
 ## Prerequisites
 
 * Symfony 5 installed, including the `symfony` cli tool.
